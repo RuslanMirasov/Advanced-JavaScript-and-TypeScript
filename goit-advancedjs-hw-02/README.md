@@ -1,200 +1,242 @@
-# Домашнє завдання Тема 2. Розгалуження та цикли
+# Домашнє завдання Тема 4. Асинхронний JavaScript і проміси
 
-## Задача 1. Замовлення дроїдів
+Привiт! 💪
+
+Давай підведемо підсумки вивченого за другий тиждень навчання.
+
+**Перевір себе — наразі ти:**
+
+- розумієш, в чому відмінність синхронного і асинхронного коду
+- знаєш, як відкласти виклик функції на певний час за допомогою тайм-аутів та інтервалів
+- розумієш, що таке проміси та як вони працюють
+- знаєш основні методи класу Promise
 
 ```
-Виконуй це завдання у файлі task-1.js
+Прийшов час на практиці закріпити ці знання під час роботи над таймером та генератором промісів!
 ```
 
-Станція з продажу ремонтних дроїдів готова до запуску, залишилося написати
-програмне забезпечення для відділу продажів. Оголоси функцію
-makeTransaction(**quantity, pricePerDroid, customerCredits**), яка складає та
-повертає повідомлення про купівлю ремонтних дроїдів.
+## Основні кроки виконання домашнього завдання
 
-Вона оголошує три параметри, значення яких будуть задаватися під час її виклику:
+- Створи репозиторій **goit-advancedjs-hw-02**
+- Збери проєкт за допомогою [Vite](https://vitejs.dev/). Ми підготували для тебе [готову збірку](https://github.com/goitacademy/vanilla-app-template) з усіма додатковими налаштуваннями проєкту та рекомендуємо використовувати саме її.
+- Прочитай завдання і виконай його в редакторі коду.
+- Переконайся, що код відформатований за допомогою **Prettier**, а в консолі відсутні помилки й попередження під час відкриття живої сторінки завдання.
+- Здай домашнє завдання на перевірку.
 
-- **quantity** — кількість замовлених дроїдів pricePerDroid — ціна одного дроїда
-- **customerCredits** — сума коштів на рахунку клієнта
+### Формат оцінювання:
 
-Доповни функцію таким чином:
+- Оцінка від 0 до 100
 
-- Оголоси змінну для зберігання загальної суми замовлення (загальна вартість
-  усіх замовлених дроїдів) і задай їй вираз розрахунку цієї суми.
-- Додай перевірку, чи зможе клієнт оплатити замовлення:
-- якщо сума до сплати перевищує кількість кредитів на рахунку клієнта, функція
-  має повертати рядок **"Insufficient funds!"**
-- в іншому випадку функція має повертати рядок **"You ordered &lt;quantity&gt;
-  droids worth &lt;totalPrice&gt; credits!"**, де **&lt;quantity&gt;** це
-  кількість замовлених дроїдів, а **&lt;totalPrice&gt;** це їх загальна
-  вартість.
+### Формат здачi:
 
-Візьми код нижче і встав після оголошення своєї функції для перевірки
-коректності її роботи. У консоль будуть виведені результати її роботи.
+- Два посилання: на вихідні файли і робочу сторінку на **GitHub Pages**
+- Прикрiплений файл репозиторію у форматi **zip**
+
+**Важливо!** Переглянь [Iнструкцію щодо завантаження робочого файлу з репозиторію на Github](https://drive.google.com/file/d/1UBw9IkvLmk4hO73ji1ScNkj3_H_vKNvT/view?usp=sharing)
+
+## Задача 1. Таймер зворотного відліку
+
+```
+Виконуй це завдання у файлах 1-timer.html і 1-timer.js
+```
+
+Напиши скрипт таймера, який здійснює зворотний відлік до певної дати. Такий таймер може використовуватися у блогах, інтернет-магазинах, сторінках реєстрації подій, під час технічного обслуговування тощо.
+
+### Елементи інтерфейсу
+
+Додай в HTML файл розмітку таймера, поля вибору кінцевої дати і кнопку, при кліку на яку таймер повинен запускатися. Додай оформлення елементів інтерфейсу згідно з макетом.
+
+```html
+<input type="text" id="datetime-picker" />
+<button type="button" data-start>Start</button>
+
+<div class="timer">
+  <div class="field">
+    <span class="value" data-days>00</span>
+    <span class="label">Days</span>
+  </div>
+  <div class="field">
+    <span class="value" data-hours>00</span>
+    <span class="label">Hours</span>
+  </div>
+  <div class="field">
+    <span class="value" data-minutes>00</span>
+    <span class="label">Minutes</span>
+  </div>
+  <div class="field">
+    <span class="value" data-seconds>00</span>
+    <span class="label">Seconds</span>
+  </div>
+</div>
+```
+
+### Бібліотека flatpickr
+
+Використовуй бібліотеку [flatpickr](https://flatpickr.js.org/) для того, щоб дозволити користувачеві кросбраузерно вибрати кінцеву дату і час в одному елементі інтерфейсу. Для того щоб підключити CSS код бібліотеки в проєкт, необхідно додати ще один імпорт, крім того, що описаний в документації.
 
 ```javascript
-console.log(makeTransaction(5, 3000, 23000)); // "You ordered 5 droids worth 15000 credits!"
-console.log(makeTransaction(3, 1000, 15000)); // "You ordered 3 droids worth 3000 credits!"
-console.log(makeTransaction(10, 5000, 8000)); // "Insufficient funds!"
-console.log(makeTransaction(8, 2000, 10000)); // "Insufficient funds!"
-console.log(makeTransaction(10, 500, 5000)); // "You ordered 10 droids worth 5000 credits!"
+// Описаний в документації
+import flatpickr from 'flatpickr';
+// Додатковий імпорт стилів
+import 'flatpickr/dist/flatpickr.min.css';
 ```
 
-Залиш цей код для перевірки ментором.
+Бібліотека очікує, що її ініціалізують на елементі **input[type="text"]**, тому ми додали до HTML документа поле **input#datetime-picker**.
+
+```html
+<input type="text" id="datetime-picker" />
+```
+
+Другим аргументом функції **flatpickr(selector, options)** можна передати необов'язковий об'єкт параметрів. Ми підготували для тебе об'єкт, який потрібен для виконання завдання. Розберися, за що відповідає кожна властивість у [документації «Options»](https://flatpickr.js.org/options/) і використовуй його у своєму коді.
+
+```javascript
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    console.log(selectedDates[0]);
+  },
+};
+```
+
+### Вибір дати
+
+Метод **onClose()** з об'єкта параметрів викликається щоразу під час закриття елемента інтерфейсу, який створює **flatpickr**. Саме в ньому варто обробляти дату, обрану користувачем. Параметр **selectedDates** — це масив обраних дат, тому ми беремо перший елемент **selectedDates[0]**.
+
+Тобі ця обрана дата буде потрібна в коді і поза межами цього методу **onClose()**. Тому оголоси поза межами методу **let** змінну, наприклад, **userSelectedDate**, і після валідації її в методі **onClose()** на минуле/майбутнє запиши обрану дату в цю **let** змінну.
+
+- Якщо користувач вибрав дату в минулому, покажи **window.alert()** з текстом **"Please choose a date in the future"** і зроби кнопку «Start» не активною.
+- Якщо користувач вибрав валідну дату (в майбутньому), кнопка «Start» стає активною.
+- Кнопка «Start» повинна бути неактивною доти, доки користувач не вибрав дату в майбутньому. Зверни увагу, що при обранні валідної дати, не запуску таймера і обранні потім невалідної дати, кнопка після розблокування має знову стати неактивною.
+- Натисканням на кнопку «Start» починається зворотний відлік часу до обраної дати з моменту натискання.
+
+### Відлік часу
+
+Натисканням на кнопку «Start» скрипт повинен обчислювати раз на секунду, скільки часу залишилось до вказаної дати, і оновлювати інтерфейс таймера, показуючи чотири цифри: дні, години, хвилини і секунди у форматі **xx:xx:xx:xx**.
+
+- Кількість днів може складатися з більше, ніж двох цифр.
+- Таймер повинен зупинятися, коли дійшов до кінцевої дати, тобто залишок часу дорівнює нулю **00:00:00:00**.
+
+```
+💡 Після запуску таймера натисканням кнопки Старт кнопка Старт і інпут стають неактивним, щоб користувач не міг обрати нову дату, поки йде відлік часу. Після зупинки таймера інпут стає активним, щоб користувач міг обрати наступну дату. Кнопка залишається не активною.
+```
+
+Для підрахунку значень використовуй готову функцію **convertMs**, де **ms** — різниця між кінцевою і поточною датою в мілісекундах.
+
+```javascript
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+  return { days, hours, minutes, seconds };
+}
+
+console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+```
+
+### Форматування часу
+
+Функція **convertMs()** повертає об'єкт з розрахованим часом, що залишився до кінцевої дати. Зверни увагу, що вона не форматує результат. Тобто якщо залишилося 4 хвилини або будь-якої іншої складової часу, то функція поверне **4**, а не **04**. В інтерфейсі таймера необхідно додавати **0**, якщо в числі менше двох символів. Напиши функцію, наприклад **addLeadingZero(value)**, яка використовує метод рядка [padStart()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart) і перед відмальовуванням інтерфейсу форматує значення.
+
+### Бібліотека повідомлень
+
+Для відображення повідомлень користувачеві, замість **window.alert()**, використовуй бібліотеку [iziToast](https://marcelodolza.github.io/iziToast/). Для того щоб підключити CSS код бібліотеки в проєкт, необхідно додати ще один імпорт, крім того, що описаний у документації.
+
+```javascript
+// Описаний у документації
+import iziToast from 'izitoast';
+// Додатковий імпорт стилів
+import 'izitoast/dist/css/iziToast.min.css';
+```
 
 ### На що буде звертати увагу ментор при перевірці:
 
-- Оголошена функція makeTransaction(quantity, pricePerDroid, customerCredits)
-- Виклик makeTransaction(5, 3000, 23000) повертає "You ordered 5 droids worth
-  15000 credits!"
-- Виклик makeTransaction(3, 1000, 15000) повертає "You ordered 3 droids worth
-  3000 credits!"
-- Виклик makeTransaction(10, 5000, 8000) повертає "Insufficient funds!"
-- Виклик makeTransaction(8, 2000, 10000) повертає "Insufficient funds!"
-- Виклик makeTransaction(10, 500, 5000) повертає "You ordered 10 droids worth
-  5000 credits!"
+- Підключені бібліотеки flatpickr та iziToast.
+- При першому завантаженні сторінки кнопка Start не активна.
+- При кліку на інпут відкривається календар, де можна вибрати дату.
+- При обранні дати з минулого, кнопка Start стає неактивною і з’являється повідомлення з текстом "Please choose a date in the future".
+- При обранні дати з майбутнього кнопка Start стає активною.
+- При натисканні на кнопку Start вона стає неактивною, на сторінку виводиться час, що лишився до обраної дати у форматі xx:xx:xx:xx, і запускається зворотний відлік часу до обраної дати.
+- Кожну секунду оновлюється інтерфейс і показує оновлені дані часу, який залишився.
+- Таймер зупиняється, коли доходить до кінцевої дати, тобто залишок часу дорівнює нулю і інтерфейс виглядає так 00:00:00:00.
+- Час в інтерфейсі відформатований і, якщо воно містить менше двох символів, на початку числа доданий 0.
 
-## Задача 2. Форматування повідомлення
+## Задача 2. Генератор промісів
 
 ```
-Виконуй це завдання у файлі task-2.js
+Виконуй це завдання у файлах 2-snackbar.html і 2-snackbar.js
 ```
 
-Оголоси функцію **formatMessage(message, maxLength)**, яка приймає рядок
-(параметр message) та перевіряє його довжину відповідно до заданої максимальної
-довжини (параметр **maxLength**).
+Додай в HTML файл розмітку форми. Форма складається з поля вводу для введення значення затримки в мілісекундах, двох радіокнопок, які визначають те, як виконається проміс, і кнопки з типом **submit**, при кліку на яку має створюватися проміс.
 
-Доповни код функції таким чином, що:
+```html
+<form class="form">
+  <label>
+    Delay (ms)
+    <input type="number" name="delay" required />
+  </label>
 
-- Якщо довжина рядка дорівнює або менша за maxLength, то функція повертає
-  початковий рядок без змін.
-- Якщо довжина перевищує maxLength, то функція обрізає рядок до maxLength
-  символів, додає трикрапку "..." в кінці та повертає обрізану версію.
+  <fieldset>
+    <legend>State</legend>
+    <label>
+      <input type="radio" name="state" value="fulfilled" required />
+      Fulfilled
+    </label>
+    <label>
+      <input type="radio" name="state" value="rejected" required />
+      Rejected
+    </label>
+  </fieldset>
 
-Візьми код нижче і встав після оголошення своєї функції для перевірки
-коректності її роботи. У консоль будуть виведені результати її роботи.
+  <button type="submit">Create notification</button>
+</form>
+```
+
+Напиши скрипт, який після сабміту форми створює проміс. В середині колбека цього промісу через вказану користувачем кількість мілісекунд проміс має виконуватися (при **fulfilled**) або відхилятися (при **rejected**), залежно від обраної опції в радіокнопках. Значенням промісу, яке передається як аргумент у методи **resolve**/**reject**, має бути значення затримки в мілісекундах.
+
+Створений проміс треба опрацювати у відповідних для вдалого/невдалого виконання методах.
+
+Якщо проміс виконується вдало, виводь у консоль наступний рядок, де **delay** — це значення затримки виклику промісу в мілісекундах.
 
 ```javascript
-console.log(formatMessage('Curabitur ligula sapien', 16)); // "Curabitur ligula..."
-console.log(formatMessage('Curabitur ligula sapien', 23)); // "Curabitur ligula sapien"
-console.log(formatMessage('Vestibulum facilisis purus nec', 20)); // "Vestibulum facilisis..."
-console.log(formatMessage('Vestibulum facilisis purus nec', 30)); // "Vestibulum facilisis purus nec"
-console.log(formatMessage('Nunc sed turpis a felis in nunc fringilla', 15)); // "Nunc sed turpis..."
-console.log(formatMessage('Nunc sed turpis a felis in nunc fringilla', 41)); // "Nunc sed turpis a felis in nunc fringilla"
+`✅ Fulfilled promise in ${delay}ms`;
 ```
 
-Залиш цей код для перевірки ментором.
+Якщо проміс буде відхилено, то виводь у консоль наступний рядок, де **delay** — це значення затримки промісу в мілісекундах.
+
+```javascript
+`❌ Rejected promise in ${delay}ms`;
+```
+
+### Бібліотека повідомлень
+
+Для відображення повідомлень, замість **console.log()**, використовуй бібліотеку [iziToast](https://izitoast.marcelodolza.com/). Для того щоб підключити CSS код бібліотеки в проєкт, необхідно додати ще один імпорт, крім того, що описаний у документації.
+
+```javascript
+// Описаний у документації
+import iziToast from 'izitoast';
+// Додатковий імпорт стилів
+import 'izitoast/dist/css/iziToast.min.css';
+```
 
 ### На що буде звертати увагу ментор при перевірці:
 
-- Оголошена функція formatMessage(message, maxLength)
-- Виклик функції formatMessage("Curabitur ligula sapien", 16) повертає
-  "Curabitur ligula..."
-- Виклик функції formatMessage("Curabitur ligula sapien", 23) повертає
-  "Curabitur ligula sapien"
-- Виклик функції formatMessage("Vestibulum facilisis purus nec", 20) повертає
-  "Vestibulum facilisis..."
-- Виклик функції formatMessage("Vestibulum facilisis purus nec", 30) повертає
-  "Vestibulum facilisis purus nec"
-- Виклик функції formatMessage("Nunc sed turpis a felis in nunc fringilla", 15)
-  повертає "Nunc sed turpis..."
-- Виклик функції formatMessage("Nunc sed turpis a felis in nunc fringilla", 41)
-  повертає "Nunc sed turpis a felis in nunc fringilla"
-
-## Задача 3. Перевірка спаму
-
-```
-Виконуй це завдання у файлі task-3.js
-```
-
-Функція checkForSpam(message) приймає рядок (параметр message), перевіряє його
-на вміст заборонених слів spam і sale, і повертає результат перевірки. Слова в
-рядку параметра message можуть бути в довільному регістрі, наприклад SPAM або
-sAlE.
-
-Доповни код функції таким чином, що:
-
-- Якщо знайдено заборонене слово (spam або sale), то функція повертає буль true
-- Якщо в рядку відсутні заборонені слова, функція повертає буль false
-
-Візьми код нижче і встав після оголошення своєї функції для перевірки
-коректності її роботи. У консоль будуть виведені результати її роботи.
-
-```javascript
-console.log(checkForSpam('Latest technology news')); // false
-console.log(checkForSpam('JavaScript weekly newsletter')); // false
-console.log(checkForSpam('Get best sale offers now!')); // true
-console.log(checkForSpam('Amazing SalE, only tonight!')); // true
-console.log(checkForSpam('Trust me, this is not a spam message')); // true
-console.log(checkForSpam('Get rid of sPaM emails. Our book in on sale!')); // true
-console.log(checkForSpam('[SPAM] How to earn fast money?')); // true
-```
-
-Залиш цей код для перевірки ментором.
-
-### На що буде звертати увагу ментор при перевірці:
-
-- Оголошена функція checkForSpam(message).
-- Виклик функції checkForSpam("Latest technology news") повертає false
-- Виклик функції checkForSpam("JavaScript weekly newsletter")повертає false
-- Виклик функції checkForSpam("Get best sale offers now!") повертає true
-- Виклик функції checkForSpam("Amazing SalE, only tonight!") повертає true
-- Виклик функції checkForSpam("Trust me, this is not a spam message") повертає
-  true
-- Виклик функції checkForSpam("Get rid of sPaM emails. Our book in on sale!")
-  повертає true
-- Виклик функції checkForSpam("[SPAM] How to earn fast money?") повертає true
-
-## Задача 4. Доставка товару
-
-```
-Виконуй це завдання у файлі task-4.js
-```
-
-Оголоси функцію getShippingCost(country), яка повинна перевіряти можливість
-доставки товару в країну користувача (параметр country) і повертати повідомлення
-про результат. Обов'язково використовуй інструкцію switch.
-
-Формат рядка, що повертається "Shipping to <country> will cost <price> credits",
-де замість <country> і <price> необхідно підставити відповідні значення.
-
-Список країн і вартість доставки:
-
-- China — 100 кредитів
-- Chile — 250 кредитів
-- Australia — 170 кредитів
-- Jamaica — 120 кредитів
-
-Зі списку видно, що доставка можлива не скрізь. Якщо зазначена країна відсутня у
-списку, то функція повинна повернути рядок "Sorry, there is no delivery to your
-country".
-
-Візьми код нижче і встав після оголошення своєї функції для перевірки
-коректності її роботи. У консоль будуть виведені результати її роботи.
-
-```javascript
-console.log(getShippingCost('Australia')); // "Shipping to Australia will cost 170 credits"
-console.log(getShippingCost('Germany')); // "Sorry, there is no delivery to your country"
-console.log(getShippingCost('China')); // "Shipping to China will cost 100 credits"
-console.log(getShippingCost('Chile')); // "Shipping to Chile will cost 250 credits"
-console.log(getShippingCost('Jamaica')); // "Shipping to Jamaica will cost 120 credits"
-console.log(getShippingCost('Sweden')); // "Sorry, there is no delivery to your country"
-```
-
-Залиш цей код для перевірки ментором.
-
-### На що буде звертати увагу ментор при перевірці:
-
-- Оголошена функція getShippingCost(country)
-- У тілі функції використана інструкція switch
-- Виклик getShippingCost("Australia") повертає "Shipping to Australia will cost
-  170 credits"
-- Виклик getShippingCost("Germany") повертає "Sorry, there is no delivery to
-  your country"
-- Виклик getShippingCost("China") повертає "Shipping to China will cost 100
-  credits"
-- Виклик getShippingCost("Chile") повертає "Shipping to Chile will cost 250
-  credits"
-- Виклик getShippingCost("Jamaica") повертає "Shipping to Jamaica will cost 120
-  credits"
-- Виклик getShippingCost("Sweden") повертає "Sorry, there is no delivery to your
-  country"
+- Підключена бібліотека iziToast.
+- При обранні стану в радіокнопках і натисканні на кнопку Create notification з’являється повідомлення, відповідного до обраного стану стилю, із затримкою в кількість мілісекунд, переданих в інпут.
+- Повідомлення, що виводиться, містить тип обраного стейту і кількість мілісекунд згідно з шаблоном в умові.
